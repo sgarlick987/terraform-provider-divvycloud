@@ -26,8 +26,11 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			"divvycloud_aws_cloud_account_sts": resourceDivvycloudAwsCloudAccountSts(),
-			"divvycloud_organization":          resourceDivvycloudOrganization(),
+			"divvycloud_aws_cloud_account_sts":            resourceDivvycloudAwsCloudAccountSts(),
+			"divvycloud_organization":                     resourceDivvycloudOrganization(),
+			"divvycloud_event_driven_harvesting":          resourceDivvycloudEventDrivenHarvesting(),
+			"divvycloud_event_driven_harvesting_consumer": resourceDivvycloudEventDrivenHarvestingConsumer(),
+			"divvycloud_event_driven_harvesting_producer": resourceDivvycloudEventDrivenHarvestingProducer(),
 		},
 		ConfigureFunc: providerConfigure,
 	}
