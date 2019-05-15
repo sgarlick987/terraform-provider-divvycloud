@@ -147,24 +147,25 @@ func resourceDivvycloudEventDrivenHarvestingProducerRead(d *schema.ResourceData,
 }
 
 func resourceDivvycloudEventDrivenHarvestingProducerDelete(d *schema.ResourceData, meta interface{}) error {
-	//token := meta.(*ClientTokenWrapper).Token
-	//c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
-	//
-	//cloudId := d.Get("cloud_id").(int)
-	//resourceId := fmt.Sprintf("divvyorganizationservice:%d", cloudId)
-	//
-	//body := &models.RemoveProducerRequest{
-	//	ResourceIds: []string{
-	//		resourceId
-	//	},
-	//}
-	//
-	//if _, err := c.PublicCloudEventdrivenharvestProducersDisablePost(
-	//	event_driven_harvesting.NewPublicCloudEventdrivenharvestProducersDisablePostParams().
-	//		WithXAuthToken(token).
-	//		WithBody(body)); err != nil {
-	//	return err
-	//}
+	token := meta.(*ClientTokenWrapper).Token
+	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
+
+	cloudId := d.Get("cloud_id").(string)
+	resourceId := fmt.Sprintf("divvyorganizationservice:%s", cloudId)
+
+
+	body := &models.RemoveProducerRequest{
+		ResourceIds: []string{
+			resourceId,
+		},
+	}
+
+	if _, err := c.PublicCloudEventdrivenharvestProducersDisablePost(
+		event_driven_harvesting.NewPublicCloudEventdrivenharvestProducersDisablePostParams().
+			WithXAuthToken(token).
+			WithBody(body)); err != nil {
+		return err
+	}
 
 	return nil
 }
