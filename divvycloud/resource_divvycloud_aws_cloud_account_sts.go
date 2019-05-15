@@ -4,6 +4,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/sgarlick987/godivvycloud/client/add_cloud_account"
 	"github.com/sgarlick987/godivvycloud/client/clouds"
+	"github.com/sgarlick987/godivvycloud/client/resources"
 	"github.com/sgarlick987/godivvycloud/models"
 )
 
@@ -99,6 +100,22 @@ func resourceDivvycloudAwsCloudAccountStsCreate(d *schema.ResourceData, meta int
 }
 
 func resourceDivvycloudAwsCloudAccountStsRead(d *schema.ResourceData, meta interface{}) error {
+	token := meta.(*ClientTokenWrapper).Token
+	c := meta.(*ClientTokenWrapper).Resources
+
+	resourceId := d.Get("resource_id").(string)
+	params := resources.NewPublicResourceDetailByResourceIDGetParams().
+		WithXAuthToken(token).
+		WithResourceID(resourceId)
+
+	_, err := c.PublicResourceDetailByResourceIDGet(params)
+
+	if err != nil {
+		return err
+	}
+
+	//_ := resp.Payload.Details
+
 	return nil
 }
 

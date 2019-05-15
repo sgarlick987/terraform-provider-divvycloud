@@ -38,8 +38,9 @@ func resourceDivvycloudOrganizationCreate(d *schema.ResourceData, meta interface
 
 	name := d.Get("name").(string)
 
-	params := organizations.NewPrototypeDomainOrganizationCreatePostParams().WithXAuthToken(token).WithBody(
-		&models.CreateneworganizationRequest{
+	params := organizations.NewPrototypeDomainOrganizationCreatePostParams().
+		WithXAuthToken(token).
+		WithBody(&models.CreateneworganizationRequest{
 			OrganizationName: &name,
 		})
 
