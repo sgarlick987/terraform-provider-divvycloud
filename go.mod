@@ -9,5 +9,5 @@ require (
 	github.com/go-openapi/swag v0.19.0 // indirect
 	github.com/go-openapi/validate v0.19.0 // indirect
 	github.com/hashicorp/terraform v0.11.13
-	github.com/sgarlick987/godivvycloud v0.0.0-20190417170534-94ac955db32d
+	github.com/sgarlick987/godivvycloud v0.0.0-20190515143227-da9d3b82b3c8
 )
