@@ -1,29 +1,71 @@
 package divvycloud
 
-import "github.com/hashicorp/terraform/helper/schema"
+import (
+	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/sgarlick987/godivvycloud/client/event_driven_harvesting"
+)
 
 func resourceDivvycloudEventDrivenHarvestingConsumer() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceDivvycloudEventDrivenHarvestingConsumerCreate,
 		Read:   resourceDivvycloudEventDrivenHarvestingConsumerRead,
-		Update: resourceDivvycloudEventDrivenHarvestingConsumerUpdate,
 		Delete: resourceDivvycloudEventDrivenHarvestingConsumerDelete,
 
 		Schema: map[string]*schema.Schema{
-
+			"cloud_id": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "Id of the cloud to be added as a consumer for event driven harvesting",
+			},
+			"organization_id": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The Organization to Enable Event Driven Harvesting",
+			},
 		},
 	}
 }
 
 func resourceDivvycloudEventDrivenHarvestingConsumerCreate(d *schema.ResourceData, meta interface{}) error {
+	token := meta.(*ClientTokenWrapper).Token
+	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
+
+	cloudId := d.Get("cloud_id").(string)
+
+	_, err := c.PublicCloudEventdrivenharvestByOrganizationidPost(
+		event_driven_harvesting.NewPublicCloudEventdrivenharvestByOrganizationidPostParams().
+			WithXAuthToken(token).
+			WithOrganizationid(cloudId))
+
+	if err != nil {
+		return err
+	}
+
+	d.SetId(cloudId)
+
 	return nil
 }
+
 func resourceDivvycloudEventDrivenHarvestingConsumerRead(d *schema.ResourceData, meta interface{}) error {
 	return nil
 }
-func resourceDivvycloudEventDrivenHarvestingConsumerUpdate(d *schema.ResourceData, meta interface{}) error {
-	return nil
-}
+
 func resourceDivvycloudEventDrivenHarvestingConsumerDelete(d *schema.ResourceData, meta interface{}) error {
+	token := meta.(*ClientTokenWrapper).Token
+	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
+
+	cloudId := d.Get("cloud_id").(string)
+
+	_, err := c.PublicCloudEventdrivenharvestDisableConsumerByOrganizationidDelete(
+		event_driven_harvesting.NewPublicCloudEventdrivenharvestDisableConsumerByOrganizationidDeleteParams().
+			WithXAuthToken(token).
+			WithOrganizationid(cloudId))
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
