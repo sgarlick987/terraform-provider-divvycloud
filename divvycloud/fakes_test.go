@@ -5,6 +5,7 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/sgarlick987/godivvycloud/client"
 	"github.com/sgarlick987/godivvycloud/client/event_driven_harvesting"
+	"github.com/sgarlick987/godivvycloud/client/organizations"
 )
 
 //As far as I can tell the only interface we have when using goswagger generated client is the ClientTransport
@@ -37,6 +38,7 @@ func setupFakeClient(transport runtime.ClientTransport, token string) *ClientTok
 		Token: token,
 		DivvyCloudV2: &client.DivvyCloudV2{
 			EventDrivenHarvesting: event_driven_harvesting.New(transport, strfmt.Default),
+			Organizations: organizations.New(transport, strfmt.Default),
 		},
 	}
 }

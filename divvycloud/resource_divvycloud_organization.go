@@ -4,6 +4,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/sgarlick987/godivvycloud/client/organizations"
 	"github.com/sgarlick987/godivvycloud/models"
+	"strconv"
 )
 
 func resourceDivvycloudOrganization() *schema.Resource {
@@ -15,8 +16,9 @@ func resourceDivvycloudOrganization() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
-				Type:     schema.TypeInt,
+				Type:     schema.TypeString,
 				Computed: true,
+				Description: "Id of the created Organization.",
 			},
 			"name": {
 				Type:        schema.TypeString,
@@ -59,7 +61,7 @@ func resourceDivvycloudOrganizationCreate(d *schema.ResourceData, meta interface
 		return err
 	}
 
-	if err := d.Set("organization_id", payload.OrganizationID); err != nil {
+	if err := d.Set("organization_id", strconv.Itoa(int(payload.OrganizationID))); err != nil {
 		return err
 	}
 
