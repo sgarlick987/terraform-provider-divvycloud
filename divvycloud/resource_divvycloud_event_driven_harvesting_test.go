@@ -25,7 +25,7 @@ func TestResourceDivvycloudEventDrivenHarvestingDeleteError(t *testing.T) {
 			"PublicCloudEventdrivenharvestDisable": errors.New("generic error deleting event driven harvesting"),
 		},
 		ResponseMap: map[string]interface{}{
-			"PublicCloudEventdrivenharvestDisable": event_driven_harvesting.NewPublicCloudEventdrivenharvestDisableOK(),
+			"PublicCloudEventdrivenharvestDisable": nil,
 		},
 	}
 

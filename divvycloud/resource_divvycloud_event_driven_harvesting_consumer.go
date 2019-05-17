@@ -1,6 +1,7 @@
 package divvycloud
 
 import (
+	"fmt"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/sgarlick987/godivvycloud/client/event_driven_harvesting"
 )
@@ -22,7 +23,7 @@ func resourceDivvycloudEventDrivenHarvestingConsumer() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "The Organization to Enable Event Driven Harvesting",
+				Description: "The Organization to Enable Event Driven Harvesting Consumer",
 			},
 		},
 	}
@@ -33,6 +34,7 @@ func resourceDivvycloudEventDrivenHarvestingConsumerCreate(d *schema.ResourceDat
 	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
 
 	cloudId := d.Get("cloud_id").(string)
+	organizationId := d.Get("organization_id").(string)
 
 	if _, err := c.PublicCloudEventdrivenharvestByOrganizationidPost(
 		event_driven_harvesting.NewPublicCloudEventdrivenharvestByOrganizationidPostParams().
@@ -41,7 +43,7 @@ func resourceDivvycloudEventDrivenHarvestingConsumerCreate(d *schema.ResourceDat
 		return err
 	}
 
-	d.SetId(cloudId)
+	d.SetId(fmt.Sprintf("%s/%s", organizationId, cloudId))
 
 	return nil
 }

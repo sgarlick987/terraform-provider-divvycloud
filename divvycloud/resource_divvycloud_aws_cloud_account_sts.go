@@ -1,6 +1,7 @@
 package divvycloud
 
 import (
+	"fmt"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/sgarlick987/godivvycloud/client/add_cloud_account"
 	"github.com/sgarlick987/godivvycloud/client/clouds"
@@ -46,6 +47,12 @@ func resourceDivvycloudAwsCloudAccountSts() *schema.Resource {
 				Computed:    true,
 				Description: "Cloud Type Id of the cloud created.",
 			},
+			"organization_id": {
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "The Organization to Enable Event Driven Harvesting",
+			},
 		},
 	}
 }
@@ -60,6 +67,7 @@ func resourceDivvycloudAwsCloudAccountStsCreate(d *schema.ResourceData, meta int
 	accountId := d.Get("account_id").(string)
 	name := d.Get("name").(string)
 	roleArn := d.Get("role_arn").(string)
+	organizationId := d.Get("organization_id").(string)
 
 	sts := &models.AddAWSCloudAccountInstanceAssumeRoleRequest{
 		CreationParams: &models.CreationParams1{
@@ -84,7 +92,7 @@ func resourceDivvycloudAwsCloudAccountStsCreate(d *schema.ResourceData, meta int
 
 	resourceId := resp.Payload.ResourceID
 
-	d.SetId(*resourceId)
+	d.SetId(fmt.Sprintf("%s/%s", organizationId, *resourceId))
 	if err := d.Set("resource_id", *resourceId); err != nil {
 		return err
 	}
