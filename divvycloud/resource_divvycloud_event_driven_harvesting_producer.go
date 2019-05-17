@@ -161,7 +161,6 @@ func resourceDivvycloudEventDrivenHarvestingProducerDelete(d *schema.ResourceDat
 	cloudId := d.Get("cloud_id").(string)
 	resourceId := fmt.Sprintf("divvyorganizationservice:%s", cloudId)
 
-
 	body := &models.RemoveProducerRequest{
 		ResourceIds: []string{
 			resourceId,

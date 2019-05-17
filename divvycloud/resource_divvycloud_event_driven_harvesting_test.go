@@ -13,7 +13,7 @@ import (
 
 /**
 TODO: dry up tests
- */
+*/
 
 func TestResourceDivvycloudEventDrivenHarvestingDeleteError(t *testing.T) {
 	transport := &FakeDivvycloudClientTransport{
