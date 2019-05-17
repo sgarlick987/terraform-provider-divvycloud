@@ -4,6 +4,8 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
 	"github.com/sgarlick987/godivvycloud/client"
+	"github.com/sgarlick987/godivvycloud/client/add_cloud_account"
+	"github.com/sgarlick987/godivvycloud/client/clouds"
 	"github.com/sgarlick987/godivvycloud/client/event_driven_harvesting"
 	"github.com/sgarlick987/godivvycloud/client/organizations"
 )
@@ -39,6 +41,8 @@ func setupFakeClient(transport runtime.ClientTransport, token string) *ClientTok
 		DivvyCloudV2: &client.DivvyCloudV2{
 			EventDrivenHarvesting: event_driven_harvesting.New(transport, strfmt.Default),
 			Organizations: organizations.New(transport, strfmt.Default),
+			Clouds: clouds.New(transport, strfmt.Default),
+			AddCloudAccount: add_cloud_account.New(transport, strfmt.Default),
 		},
 	}
 }

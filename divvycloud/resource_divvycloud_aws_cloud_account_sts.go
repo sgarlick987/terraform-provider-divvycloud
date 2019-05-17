@@ -6,6 +6,7 @@ import (
 	"github.com/sgarlick987/godivvycloud/client/add_cloud_account"
 	"github.com/sgarlick987/godivvycloud/client/clouds"
 	"github.com/sgarlick987/godivvycloud/models"
+	"strconv"
 )
 
 func resourceDivvycloudAwsCloudAccountSts() *schema.Resource {
@@ -37,7 +38,6 @@ func resourceDivvycloudAwsCloudAccountSts() *schema.Resource {
 				Description: "Resource Id of the cloud created.",
 			},
 			"cloud_id": {
-
 				Type:        schema.TypeInt,
 				Computed:    true,
 				Description: "Integer id of the cloud created.",
@@ -91,15 +91,16 @@ func resourceDivvycloudAwsCloudAccountStsCreate(d *schema.ResourceData, meta int
 	}
 
 	resourceId := resp.Payload.ResourceID
+	cloudId := resp.Payload.ID
 
-	d.SetId(fmt.Sprintf("%s/%s", organizationId, *resourceId))
+	d.SetId(fmt.Sprintf("%s/%s", organizationId, strconv.Itoa(int(*cloudId))))
 	if err := d.Set("resource_id", *resourceId); err != nil {
 		return err
 	}
 	if err := d.Set("cloud_type_id", *resp.Payload.CloudTypeID); err != nil {
 		return err
 	}
-	if err := d.Set("cloud_id", *resp.Payload.ID); err != nil {
+	if err := d.Set("cloud_id", *cloudId); err != nil {
 		return err
 	}
 
