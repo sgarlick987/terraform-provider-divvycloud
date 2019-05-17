@@ -12,6 +12,7 @@ resource "divvycloud_aws_cloud_account_sts" "consumer" {
   name = "consumer-account"
   account_id = "123456"
   role_arn = "arn:aws:iam::123456:role/divvycloud"
+  session_name = "mysession"
   organization_id = "${divvycloud_event_driven_harvesting.event_driven_harvesting.organization_id}"
 }
 
@@ -19,6 +20,7 @@ resource "divvycloud_aws_cloud_account_sts" "producer" {
   name = "producer-account"
   account_id = "654321"
   role_arn = "arn:aws:iam::654321:role/divvycloud"
+  session_name = "mysession"
   organization_id = "${divvycloud_event_driven_harvesting.event_driven_harvesting.organization_id}"
 }
 

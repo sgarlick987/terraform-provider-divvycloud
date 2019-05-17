@@ -106,6 +106,7 @@ func TestResourceDivvycloudAwsCloudAccountStsCreate(t *testing.T) {
 	resourceId := "divvysvc:1"
 	name := "mycloud"
 	cloudType := "AWS"
+	sessionName := "sessionName"
 	transport := &FakeDivvycloudClientTransport{
 		ParamsMap: map[string]runtime.ClientRequestWriter{},
 		CalledMap: map[string]bool{
@@ -134,6 +135,7 @@ func TestResourceDivvycloudAwsCloudAccountStsCreate(t *testing.T) {
 			"role_arn":        roleArn,
 			"account_id":      accountId,
 			"organization_id": organizationId,
+			"session_name":    sessionName,
 		},
 	}
 
@@ -165,6 +167,10 @@ func TestResourceDivvycloudAwsCloudAccountStsCreate(t *testing.T) {
 
 	if d.Get("resource_id").(string) != resourceId {
 		t.Error("name should be set to state")
+	}
+
+	if d.Get("session_name").(string) != sessionName {
+		t.Error("sessionName should be set to state")
 	}
 
 	if d.Get("organization_id").(string) != organizationId {
@@ -206,6 +212,7 @@ func TestResourceDivvycloudAwsCloudAccountStsCreateError(t *testing.T) {
 	organizationId := "1"
 	accountId := "123456"
 	name := "mycloud"
+	sessionName := "sessionName"
 	returnedErr := errors.New("error creating")
 
 	transport := &FakeDivvycloudClientTransport{
@@ -228,6 +235,7 @@ func TestResourceDivvycloudAwsCloudAccountStsCreateError(t *testing.T) {
 			"name":            name,
 			"account_id":      accountId,
 			"organization_id": organizationId,
+			"session_name":    sessionName,
 		},
 	}
 
@@ -251,6 +259,7 @@ func TestResourceDivvycloudAwsCloudAccountStsUpdate(t *testing.T) {
 	resourceId := "divvysvc:1"
 	name := "mycloud"
 	cloudType := "AWS"
+	sessionName := "sessionName"
 
 	transport := &FakeDivvycloudClientTransport{
 		ParamsMap: map[string]runtime.ClientRequestWriter{},
@@ -276,22 +285,25 @@ func TestResourceDivvycloudAwsCloudAccountStsUpdate(t *testing.T) {
 			"resource_id":     resourceId,
 			"organization_id": organizationId,
 			"name":            name,
+			"session_name":    sessionName,
 		},
 	}
 
 	newName := "newcloud"
 	newAccountId := "newAccount"
 	newRoleArn := "newrole"
+	newSessionName := "newSessionName"
 	raw, err := config.NewRawConfig(
 		map[string]interface{}{
-			"id":         id,
-			"name":       newName,
-			"role_arn":   newRoleArn,
-			"account_id": newAccountId,
+			"id":              id,
+			"name":            newName,
+			"role_arn":        newRoleArn,
+			"account_id":      newAccountId,
 			"cloud_id":        strconv.Itoa(int(cloudId)),
 			"cloud_type_id":   cloudType,
 			"resource_id":     resourceId,
 			"organization_id": organizationId,
+			"session_name":    newSessionName,
 		})
 
 	if err != nil {
@@ -326,6 +338,10 @@ func TestResourceDivvycloudAwsCloudAccountStsUpdate(t *testing.T) {
 
 	if d.Get("name").(string) != newName {
 		t.Error("new name should be set to state")
+	}
+
+	if d.Get("session_name").(string) != newSessionName {
+		t.Error("new sessionName should be set to state")
 	}
 
 	if d.Get("cloud_type_id").(string) != cloudType {
@@ -393,10 +409,10 @@ func TestResourceDivvycloudAwsCloudAccountStsUpdateError(t *testing.T) {
 	newRoleArn := "newrole"
 	raw, err := config.NewRawConfig(
 		map[string]interface{}{
-			"id":         id,
-			"name":       newName,
-			"role_arn":   newRoleArn,
-			"account_id": newAccountId,
+			"id":              id,
+			"name":            newName,
+			"role_arn":        newRoleArn,
+			"account_id":      newAccountId,
 			"cloud_id":        strconv.Itoa(int(cloudId)),
 			"cloud_type_id":   cloudType,
 			"resource_id":     resourceId,

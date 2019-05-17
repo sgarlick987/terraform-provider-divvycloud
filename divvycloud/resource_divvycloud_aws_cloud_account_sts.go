@@ -53,6 +53,11 @@ func resourceDivvycloudAwsCloudAccountSts() *schema.Resource {
 				ForceNew:    true,
 				Description: "The Organization to Enable Event Driven Harvesting",
 			},
+			"session_name": {
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The session name for role assumption",
+			},
 		},
 	}
 }
@@ -61,7 +66,7 @@ func resourceDivvycloudAwsCloudAccountStsCreate(d *schema.ResourceData, meta int
 	token := meta.(*ClientTokenWrapper).Token
 	c := meta.(*ClientTokenWrapper).AddCloudAccount
 
-	sessionName := "divvycloud-devops"
+	sessionName := d.Get("session_name").(string)
 	authenticationType := "instance_assume_role"
 	cloudType := "AWS"
 	accountId := d.Get("account_id").(string)
@@ -131,7 +136,7 @@ func resourceDivvycloudAwsCloudAccountStsUpdate(d *schema.ResourceData, meta int
 	token := meta.(*ClientTokenWrapper).Token
 	c := meta.(*ClientTokenWrapper).Clouds
 
-	sessionName := "divvycloud-devops"
+	sessionName := d.Get("session_name").(string)
 	authenticationType := "instance_assume_role"
 	cloudType := "AWS"
 	accountId := d.Get("account_id").(string)
