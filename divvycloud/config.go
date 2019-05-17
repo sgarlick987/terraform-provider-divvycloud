@@ -5,13 +5,12 @@ import (
 	"github.com/sgarlick987/godivvycloud/client/users"
 	"github.com/sgarlick987/godivvycloud/models"
 	"log"
-	"net/url"
 )
 
-type Config struct {
-	Address  string
+type LoginConfig struct {
 	Username string
 	Password string
+	Client   *client.DivvyCloudV2
 }
 
 // Wrap the generated divvycloud client with a token that is returned from the login call at client setup
@@ -24,21 +23,7 @@ type ClientTokenWrapper struct {
 // I've no idea if this is proper doing the login here to get the session token
 // divvycloud requires a login with a username/password
 // and then taking the session id returned and using it as a token in X-Auth-Token header
-func (c *Config) Client() (interface{}, error) {
-	address, err := url.Parse(c.Address)
-
-	if err != nil {
-		return nil, err
-	}
-
-	transport := &client.TransportConfig{
-		BasePath: address.Path,
-		Host:     address.Host,
-		Schemes:  []string{address.Scheme},
-	}
-	log.Print("[DEBUG] setting up divvycloud http client")
-	divvycloud := client.NewHTTPClientWithConfig(nil, transport)
-
+func (c *LoginConfig) WrappedClient() (interface{}, error) {
 	log.Print("[DEBUG] creating login params")
 	params := users.NewPublicUserLoginPostParams().WithBody(&models.LoginRequest{
 		Password: &c.Password,
@@ -46,7 +31,7 @@ func (c *Config) Client() (interface{}, error) {
 	})
 
 	log.Print("[DEBUG] calling user login")
-	resp, err := divvycloud.Users.PublicUserLoginPost(params)
+	resp, err := c.Client.Users.PublicUserLoginPost(params)
 
 	if err != nil {
 		return nil, err
@@ -57,6 +42,6 @@ func (c *Config) Client() (interface{}, error) {
 
 	return &ClientTokenWrapper{
 		Token:        *token,
-		DivvyCloudV2: divvycloud,
+		DivvyCloudV2: c.Client,
 	}, nil
 }

@@ -3,6 +3,8 @@ package divvycloud
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/sgarlick987/godivvycloud/client"
+	"net/url"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -38,11 +40,25 @@ func Provider() terraform.ResourceProvider {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	config := &Config{
-		Address:  d.Get("address").(string),
-		Username: d.Get("username").(string),
-		Password: d.Get("password").(string),
+	address := d.Get("address").(string)
+	addressUrl, err := url.Parse(address)
+
+	if err != nil {
+		return nil, err
 	}
 
-	return config.Client()
+	transport := &client.TransportConfig{
+		BasePath: addressUrl.Path,
+		Host:     addressUrl.Host,
+		Schemes:  []string{addressUrl.Scheme},
+	}
+
+	c := &LoginConfig{
+		Username: d.Get("username").(string),
+		Password: d.Get("password").(string),
+		Client:   client.NewHTTPClientWithConfig(nil, transport),
+	}
+
+	return c.WrappedClient()
+
 }

@@ -34,12 +34,10 @@ func resourceDivvycloudEventDrivenHarvestingConsumerCreate(d *schema.ResourceDat
 
 	cloudId := d.Get("cloud_id").(string)
 
-	_, err := c.PublicCloudEventdrivenharvestByOrganizationidPost(
+	if _, err := c.PublicCloudEventdrivenharvestByOrganizationidPost(
 		event_driven_harvesting.NewPublicCloudEventdrivenharvestByOrganizationidPostParams().
 			WithXAuthToken(token).
-			WithOrganizationid(cloudId))
-
-	if err != nil {
+			WithOrganizationid(cloudId)); err != nil {
 		return err
 	}
 
@@ -58,12 +56,10 @@ func resourceDivvycloudEventDrivenHarvestingConsumerDelete(d *schema.ResourceDat
 
 	cloudId := d.Get("cloud_id").(string)
 
-	_, err := c.PublicCloudEventdrivenharvestDisableConsumerByOrganizationidDelete(
+	if _, err := c.PublicCloudEventdrivenharvestDisableConsumerByOrganizationidDelete(
 		event_driven_harvesting.NewPublicCloudEventdrivenharvestDisableConsumerByOrganizationidDeleteParams().
 			WithXAuthToken(token).
-			WithOrganizationid(cloudId))
-
-	if err != nil {
+			WithOrganizationid(cloudId)); err != nil {
 		return err
 	}
 

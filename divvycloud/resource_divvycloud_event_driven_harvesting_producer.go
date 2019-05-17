@@ -6,6 +6,7 @@ import (
 	"github.com/sgarlick987/godivvycloud/client/event_driven_harvesting"
 	"github.com/sgarlick987/godivvycloud/models"
 	"log"
+	"strconv"
 )
 
 func resourceDivvycloudEventDrivenHarvestingProducer() *schema.Resource {
@@ -51,7 +52,7 @@ func resourceDivvycloudEventDrivenHarvestingProducerCreate(d *schema.ResourceDat
 
 	log.Printf("[DEBUG] creating event driven harvest producer")
 	consumerCloudId := d.Get("consumer_cloud_id").(string)
-	cloudId := d.Get("cloud_id").(int)
+	cloudId := d.Get("cloud_id").(string)
 	regions := []string{
 		"us-east-1",
 		"us-east-2",
@@ -116,8 +117,15 @@ func resourceDivvycloudEventDrivenHarvestingProducerCreate(d *schema.ResourceDat
 	byBadge := false
 	byConsumer := false
 
+	//this is just us converting the cloudId to its divvy native name and to an int32 for the generate godivvycloud client
+	orgServiceId, err := strconv.Atoi(cloudId)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	body := &models.AddProducerRequest{
-		OrganizationServiceIds: []int32{int32(cloudId)},
+		OrganizationServiceIds: []int32{int32(orgServiceId)},
 		Regions:                regions,
 		ResourceTypes:          resourceTypes,
 		EnableAllTypes:         &enableAllTypes,

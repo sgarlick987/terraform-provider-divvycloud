@@ -30,14 +30,13 @@ func resourceDivvycloudEventDrivenHarvesting() *schema.Resource {
 }
 
 func resourceDivvycloudEventDrivenHarvestingCreate(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] creating event driven harvest")
+
 	token := meta.(*ClientTokenWrapper).Token
 	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
 
-	log.Printf("[DEBUG] creating event driven harvest")
 	enabled := d.Get("enabled").(bool)
 	organizationId := d.Get("organization_id").(string)
-
-	d.SetId(organizationId)
 
 	if enabled {
 		if _, err := c.PublicCloudEventdrivenharvestEnable(
@@ -45,14 +44,18 @@ func resourceDivvycloudEventDrivenHarvestingCreate(d *schema.ResourceData, meta 
 			return err
 		}
 	}
+
+	d.SetId(organizationId)
+
 	return resourceDivvycloudEventDrivenHarvestingRead(d, meta)
 }
 
 func resourceDivvycloudEventDrivenHarvestingRead(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] reading event driven harvest")
+
 	token := meta.(*ClientTokenWrapper).Token
 	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
 
-	log.Printf("[DEBUG] reading event driven harvest")
 	ok, err := c.PublicCloudEventdrivenharvest(
 		event_driven_harvesting.NewPublicCloudEventdrivenharvestParams().WithXAuthToken(token))
 
@@ -60,43 +63,31 @@ func resourceDivvycloudEventDrivenHarvestingRead(d *schema.ResourceData, meta in
 		return err
 	}
 
-	if err = d.Set("enabled", ok.Payload.EventDrivenHarvestEnabled); err != nil {
-		return err
-	}
-
-	return nil
+	return d.Set("enabled", ok.Payload.EventDrivenHarvestEnabled)
 }
 
 func resourceDivvycloudEventDrivenHarvestingUpdate(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] updating event driven harvest")
 
 	if d.HasChange("enabled") {
-		enabled := d.Get("enabled").(bool)
-
-		if enabled {
-			if err := resourceDivvycloudEventDrivenHarvestingCreate(d, meta); err != nil {
-				return err
-			}
+		if d.Get("enabled").(bool) {
+			return resourceDivvycloudEventDrivenHarvestingCreate(d, meta)
 		} else {
-			if err := resourceDivvycloudEventDrivenHarvestingDelete(d, meta); err != nil {
-				return err
-			}
+			return resourceDivvycloudEventDrivenHarvestingDelete(d, meta)
 		}
 	}
 
-	return resourceDivvycloudEventDrivenHarvestingRead(d, meta)
+	return nil
 }
 
 func resourceDivvycloudEventDrivenHarvestingDelete(d *schema.ResourceData, meta interface{}) error {
+	log.Printf("[DEBUG] deleting event driven harvest")
+
 	token := meta.(*ClientTokenWrapper).Token
 	c := meta.(*ClientTokenWrapper).EventDrivenHarvesting
 
-	log.Printf("[DEBUG] deleting event driven harvest")
+	_, err := c.PublicCloudEventdrivenharvestDisable(
+		event_driven_harvesting.NewPublicCloudEventdrivenharvestDisableParams().WithXAuthToken(token))
 
-	if _, err := c.PublicCloudEventdrivenharvestDisable(
-		event_driven_harvesting.NewPublicCloudEventdrivenharvestDisableParams().WithXAuthToken(token)); err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
