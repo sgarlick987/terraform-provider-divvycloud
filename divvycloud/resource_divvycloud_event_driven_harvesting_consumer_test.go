@@ -127,8 +127,7 @@ func TestResourceDivvycloudEventDrivenHarvestingConsumerCreate(t *testing.T) {
 			"PublicCloudEventdrivenharvestByOrganizationidPost": nil,
 		},
 		ResponseMap: map[string]interface{}{
-			"PublicCloudEventdrivenharvestByOrganizationidPost":
-			event_driven_harvesting.NewPublicCloudEventdrivenharvestByOrganizationidPostOK(),
+			"PublicCloudEventdrivenharvestByOrganizationidPost": event_driven_harvesting.NewPublicCloudEventdrivenharvestByOrganizationidPostOK(),
 		},
 	}
 

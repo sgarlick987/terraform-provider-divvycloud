@@ -21,8 +21,7 @@ func TestResourceDivvycloudOrganizationDelete(t *testing.T) {
 			"PrototypeDomainOrganizationDeleteByOrganizationResourceIdDelete": nil,
 		},
 		ResponseMap: map[string]interface{}{
-			"PrototypeDomainOrganizationDeleteByOrganizationResourceIdDelete":
-			&organizations.PrototypeDomainOrganizationDeleteByOrganizationResourceIDDeleteOK{},
+			"PrototypeDomainOrganizationDeleteByOrganizationResourceIdDelete": &organizations.PrototypeDomainOrganizationDeleteByOrganizationResourceIDDeleteOK{},
 		},
 	}
 
@@ -116,8 +115,7 @@ func TestResourceDivvycloudOrganizationCreate(t *testing.T) {
 			"PrototypeDomainOrganizationCreatePost": nil,
 		},
 		ResponseMap: map[string]interface{}{
-			"PrototypeDomainOrganizationCreatePost":
-			&organizations.PrototypeDomainOrganizationCreatePostOK{
+			"PrototypeDomainOrganizationCreatePost": &organizations.PrototypeDomainOrganizationCreatePostOK{
 				Payload: &models.DomainOrganizationCreateResponse{
 					ResourceID:     resourceId,
 					OrganizationID: int32(organizationId),
@@ -225,8 +223,7 @@ func TestResourceDivvycloudOrganizationUpdate(t *testing.T) {
 			"PrototypeDomainOrganizationUpdateByOrganizationResourceIdPost": nil,
 		},
 		ResponseMap: map[string]interface{}{
-			"PrototypeDomainOrganizationUpdateByOrganizationResourceIdPost":
-			&organizations.PrototypeDomainOrganizationUpdateByOrganizationResourceIDPostOK{},
+			"PrototypeDomainOrganizationUpdateByOrganizationResourceIdPost": &organizations.PrototypeDomainOrganizationUpdateByOrganizationResourceIDPostOK{},
 		},
 	}
 
@@ -316,7 +313,7 @@ func TestResourceDivvycloudOrganizationUpdateError(t *testing.T) {
 
 	raw, err := config.NewRawConfig(
 		map[string]interface{}{
-			"name":            newName,
+			"name": newName,
 		})
 
 	if err != nil {

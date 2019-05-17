@@ -16,8 +16,8 @@ func resourceDivvycloudOrganization() *schema.Resource {
 
 		Schema: map[string]*schema.Schema{
 			"organization_id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
 				Description: "Id of the created Organization.",
 			},
 			"name": {

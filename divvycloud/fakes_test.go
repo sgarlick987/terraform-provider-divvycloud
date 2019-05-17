@@ -40,9 +40,9 @@ func setupFakeClient(transport runtime.ClientTransport, token string) *ClientTok
 		Token: token,
 		DivvyCloudV2: &client.DivvyCloudV2{
 			EventDrivenHarvesting: event_driven_harvesting.New(transport, strfmt.Default),
-			Organizations: organizations.New(transport, strfmt.Default),
-			Clouds: clouds.New(transport, strfmt.Default),
-			AddCloudAccount: add_cloud_account.New(transport, strfmt.Default),
+			Organizations:         organizations.New(transport, strfmt.Default),
+			Clouds:                clouds.New(transport, strfmt.Default),
+			AddCloudAccount:       add_cloud_account.New(transport, strfmt.Default),
 		},
 	}
 }
